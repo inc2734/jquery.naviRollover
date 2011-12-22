@@ -38,59 +38,61 @@
 		var navurl;		// ナビゲーションのURLパス
 		var baseUrl;	// トップページURLパス（基準値）
 
-		// 引数がちゃんとあるときだけ処理
-		if ( setting.root ) {
-			topurl = setting.root;
-			switch ( setting.globalFlg ) {
-				case true :
-					// 現在のURLパスからトップ階層を省いたもの
-					url = getPathUnderSecondDir( location.pathname );
-					break;
-				case false :
-					// 現在のURLパスを取得（その階層以下のページを省くため、一番後ろの / まで）。
-					url = getPathUntilLastSlash( location.pathname );
-					break;
-			}
-			var naviArr = navi.find( setting.tag );
-			$.each( naviArr, function() {
-				if ( this.pathname ) {
-					var _pathname = this.pathname;
-				} else {
-					var _pathname = $(this).find( 'a' )[0].pathname;
-				}
-				// IE用
-				if ( _pathname.substring( 0, 1 ) != '/' ) {
-					_pathname = '/' + this.pathname;
-				}
-
-				// 2階層目のディレクトリを基準に、現在のページがその下位であれば処理
-				// デフォルトは最後のディレクトリを基準に処理
+		return this.each( function() {
+			// 引数がちゃんとあるときだけ処理
+			if ( setting.root ) {
+				topurl = setting.root;
 				switch ( setting.globalFlg ) {
 					case true :
-						navurl = getPathUnderSecondDir( _pathname );
-						baseUrl = '/';
+						// 現在のURLパスからトップ階層を省いたもの
+						url = getPathUnderSecondDir( location.pathname );
 						break;
 					case false :
-						navurl = getPathUntilLastSlash( _pathname );
-						baseUrl = topurl;
+						// 現在のURLパスを取得（その階層以下のページを省くため、一番後ろの / まで）。
+						url = getPathUntilLastSlash( location.pathname );
 						break;
 				}
-				// 一致したのが見つかったら
-				if ( url.indexOf( navurl ) == 0 && navurl != baseUrl || navurl == url ) {
-					switch ( setting.type ) {
-						case 'html' :
-							$(this).addClass( setting.className );
+				var naviArr = navi.find( setting.tag );
+				$.each( naviArr, function() {
+					if ( this.pathname ) {
+						var _pathname = this.pathname;
+					} else {
+						var _pathname = $(this).find( 'a' )[0].pathname;
+					}
+					// IE用
+					if ( _pathname.substring( 0, 1 ) != '/' ) {
+						_pathname = '/' + this.pathname;
+					}
+	
+					// 2階層目のディレクトリを基準に、現在のページがその下位であれば処理
+					// デフォルトは最後のディレクトリを基準に処理
+					switch ( setting.globalFlg ) {
+						case true :
+							navurl = getPathUnderSecondDir( _pathname );
+							baseUrl = '/';
 							break;
-						case 'image' :
-							var currentImg = $(this).find('img').attr('src').split( "_n", 2 );
-							var newCurrentImgSrc = currentImg[0] + "_r" + currentImg[1];
-							var currentImg = $(this).find('img').attr({ src: newCurrentImgSrc });
+						case false :
+							navurl = getPathUntilLastSlash( _pathname );
+							baseUrl = topurl;
 							break;
 					}
-					return setting.keepFlg;
-				}
-			});
-		}
+					// 一致したのが見つかったら
+					if ( url.indexOf( navurl ) == 0 && navurl != baseUrl || navurl == url ) {
+						switch ( setting.type ) {
+							case 'html' :
+								$(this).addClass( setting.className );
+								break;
+							case 'image' :
+								var currentImg = $(this).find('img').attr('src').split( "_n", 2 );
+								var newCurrentImgSrc = currentImg[0] + "_r" + currentImg[1];
+								var currentImg = $(this).find('img').attr({ src: newCurrentImgSrc });
+								break;
+						}
+						return setting.keepFlg;
+					}
+				});
+			}
+		});
 
 		/* 最後の / の位置を返す
 		--------------------------------------------------*/
