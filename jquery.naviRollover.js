@@ -77,4 +77,41 @@
 				}
 				// 一致したのが見つかったら
 				if ( url.indexOf( navurl ) == 0 && navurl != baseUrl || navurl == url ) {
-		
+					switch ( setting.type ) {
+						case 'html' :
+							$(this).addClass( setting.className );
+							break;
+						case 'image' :
+							var currentImg = $(this).find('img').attr('src').split( "_n", 2 );
+							var newCurrentImgSrc = currentImg[0] + "_r" + currentImg[1];
+							var currentImg = $(this).find('img').attr({ src: newCurrentImgSrc });
+							break;
+					}
+					return setting.keepFlg;
+				}
+			});
+		}
+
+		/* 最後の / の位置を返す
+		--------------------------------------------------*/
+		function getPathUntilLastSlash( str ) {
+			var c = str.lastIndexOf( "/" );			// 一番後ろの/の位置を取得（その階層以下のページを省くため）
+			var path = str.substring( 0, c + 1 );	// 頭から一番後ろの/までの文字列を返す
+			// /が複数ある時用
+			if ( path.match( /^\/{2,}(.*)/i ) ) {
+				path = '/' + RegExp.$1;
+			}
+			return path;
+		}
+
+		/* 引数からトップ階層を省いたものを返す
+		--------------------------------------------------*/
+		function getPathUnderSecondDir( str ) {
+			var path = getPathUntilLastSlash( str );
+			path = path.substring( topurl.length );
+			var n = path.indexOf( "/" );
+			path = '/' + path.substring( 0, n + 1 );
+			return path;
+		}
+	};
+})( jQuery );
