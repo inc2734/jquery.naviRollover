@@ -1,8 +1,8 @@
 /*
- * jquery.naviRollover.js ver.1.2
+ * jquery.naviRollover.js ver.1.2.2
  * Author : http://2inc.org
  * created: 2011/06/14
- * modified : 2011/12/22
+ * modified : 2012/02/21
  * creative commons 表示 - 継承 3.0 (CC BY-SA 3.0)
  * http://creativecommons.org/licenses/by-sa/3.0/deed.ja
  *
@@ -54,41 +54,44 @@
 				}
 				var naviArr = navi.find( setting.tag );
 				$.each( naviArr, function() {
-					if ( this.pathname ) {
-						var _pathname = this.pathname;
-					} else {
-						var _pathname = $(this).find( 'a' )[0].pathname;
+					if ( typeof this.pathname !== 'undefined' ) {
+						var atag = this;
+					} else if ( $(this).find( 'a' )[0] ) {
+						var atag = $(this).find( 'a' )[0];
 					}
-					// IE用
-					if ( _pathname.substring( 0, 1 ) != '/' ) {
-						_pathname = '/' + this.pathname;
-					}
-	
-					// 2階層目のディレクトリを基準に、現在のページがその下位であれば処理
-					// デフォルトは最後のディレクトリを基準に処理
-					switch ( setting.globalFlg ) {
-						case true :
-							navurl = getPathUnderSecondDir( _pathname );
-							baseUrl = '/';
-							break;
-						case false :
-							navurl = getPathUntilLastSlash( _pathname );
-							baseUrl = topurl;
-							break;
-					}
-					// 一致したのが見つかったら
-					if ( url.indexOf( navurl ) == 0 && navurl != baseUrl || navurl == url ) {
-						switch ( setting.type ) {
-							case 'html' :
-								$(this).addClass( setting.className );
+					if ( typeof atag !== 'undefined' && typeof atag.pathname !== 'undefined' ) {
+						var _pathname = atag.pathname;
+						// IE用
+						if ( _pathname.substring( 0, 1 ) != '/' ) {
+							_pathname = '/' + atag.pathname;
+						}
+			
+						// 2階層目のディレクトリを基準に、現在のページがその下位であれば処理
+						// デフォルトは最後のディレクトリを基準に処理
+						switch ( setting.globalFlg ) {
+							case true :
+								navurl = getPathUnderSecondDir( _pathname );
+								baseUrl = '/';
 								break;
-							case 'image' :
-								var currentImg = $(this).find('img').attr('src').split( "_n", 2 );
-								var newCurrentImgSrc = currentImg[0] + "_r" + currentImg[1];
-								var currentImg = $(this).find('img').attr({ src: newCurrentImgSrc });
+							case false :
+								navurl = getPathUntilLastSlash( _pathname );
+								baseUrl = topurl;
 								break;
 						}
-						return setting.keepFlg;
+						// 一致したのが見つかったら
+						if ( url.indexOf( navurl ) == 0 && navurl != baseUrl || navurl == url ) {
+							switch ( setting.type ) {
+								case 'html' :
+									$(atag).addClass( setting.className );
+									break;
+								case 'image' :
+									var currentImg = $(atag).find('img').attr('src').split( "_n", 2 );
+									var newCurrentImgSrc = currentImg[0] + "_r" + currentImg[1];
+									var currentImg = $(atag).find('img').attr({ src: newCurrentImgSrc });
+									break;
+							}
+							return setting.keepFlg;
+						}
 					}
 				});
 			}
