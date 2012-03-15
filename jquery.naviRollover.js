@@ -1,8 +1,8 @@
 /*
- * jquery.naviRollover.js ver.1.2.2
+ * jquery.naviRollover.js ver.1.2.3
  * Author : http://2inc.org
  * created: 2011/06/14
- * modified : 2012/02/21
+ * modified : 2012/03/15
  * creative commons 表示 - 継承 3.0 (CC BY-SA 3.0)
  * http://creativecommons.org/licenses/by-sa/3.0/deed.ja
  *
@@ -32,7 +32,7 @@
 			'className' : 'cur'			// カレントリンクに付与されるclass名
 		};
 		var topurl = '';	// トップページURLパス（実値）
-		var setting = $.extend(defaults, config);
+		var setting = $.extend( defaults, config );
 		var url;		// 現在のURLパス（ページ名は除く）
 		var naviArr;	// ナビゲーションのタグ（リンク）の集合
 		var navurl;		// ナビゲーションのURLパス
@@ -56,16 +56,16 @@
 				$.each( naviArr, function() {
 					if ( typeof this.pathname !== 'undefined' ) {
 						var atag = this;
-					} else if ( $(this).find( 'a' )[0] ) {
-						var atag = $(this).find( 'a' )[0];
+					} else if ( typeof $(this).find( 'a' ).get(0) !== 'undefined' ) {
+						var atag = $(this).find( 'a' ).get(0);
 					}
-					if ( typeof atag !== 'undefined' && typeof atag.pathname !== 'undefined' ) {
+					if ( typeof atag !== 'undefined' && atag.hostname === location.hostname ) {
 						var _pathname = atag.pathname;
 						// IE用
 						if ( _pathname.substring( 0, 1 ) != '/' ) {
-							_pathname = '/' + atag.pathname;
+							_pathname = '/' + _pathname;
 						}
-			
+		
 						// 2階層目のディレクトリを基準に、現在のページがその下位であれば処理
 						// デフォルトは最後のディレクトリを基準に処理
 						switch ( setting.globalFlg ) {
@@ -82,12 +82,12 @@
 						if ( url.indexOf( navurl ) == 0 && navurl != baseUrl || navurl == url ) {
 							switch ( setting.type ) {
 								case 'html' :
-									$(atag).addClass( setting.className );
+									$(this).addClass( setting.className );
 									break;
 								case 'image' :
-									var currentImg = $(atag).find('img').attr('src').split( "_n", 2 );
+									var currentImg = $(this).find('img').attr('src').split( "_n", 2 );
 									var newCurrentImgSrc = currentImg[0] + "_r" + currentImg[1];
-									var currentImg = $(atag).find('img').attr({ src: newCurrentImgSrc });
+									var currentImg = $(this).find('img').attr({ src: newCurrentImgSrc });
 									break;
 							}
 							return setting.keepFlg;
