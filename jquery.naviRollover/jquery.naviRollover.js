@@ -1,13 +1,27 @@
-/*
- * jquery.naviRollover.js ver.1.2.3
- * Author : http://2inc.org
- * created: 2011/06/14
- * modified : 2012/03/15
- * creative commons 表示 - 継承 3.0 (CC BY-SA 3.0)
- * http://creativecommons.org/licenses/by-sa/3.0/deed.ja
+/**
+ * jquery.naviRollover.js
+ * Description: 現在のページが属するカテゴリーのボタンにクラスをつけたり画像を反転させたりするjQueryプラグイン
+ * Version: 1.3
+ * Author: Takashi Kitajima
+ * Autho URI: http://2inc.org
+ * created: Jun 6, 2011
+ * modified : May 12, 2012
+ * License: GPL2
  *
- * 現在のページが属するカテゴリーのボタンにクラスをつけたり
- * 画像を反転させたりするjQueryプラグイン
+ * Copyright 2012 Takashi Kitajima (email : inc@2inc.org)
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 2, as
+ * published by the Free Software Foundation.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * ナビゲーションの各リンクの最後の/を基準に各カテゴリのディレクトリを判別
  * 例：http://2inc.org/hoge/fuga/ → /fuga/ 現在のページが/fuga/以下なら処理
