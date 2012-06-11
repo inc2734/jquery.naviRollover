@@ -1,11 +1,11 @@
 /**
  * jquery.naviRollover.js
  * Description: 現在のページが属するカテゴリーのボタンにクラスをつけたり画像を反転させたりするjQueryプラグイン
- * Version: 1.3
+ * Version: 1.3.1
  * Author: Takashi Kitajima
  * Autho URI: http://2inc.org
  * created: Jun 6, 2011
- * modified : May 12, 2012
+ * modified : July 11, 2012
  * License: GPL2
  *
  * Copyright 2012 Takashi Kitajima (email : inc@2inc.org)
@@ -79,7 +79,7 @@
 						if ( _pathname.substring( 0, 1 ) != '/' ) {
 							_pathname = '/' + _pathname;
 						}
-		
+
 						// 2階層目のディレクトリを基準に、現在のページがその下位であれば処理
 						// デフォルトは最後のディレクトリを基準に処理
 						switch ( setting.globalFlg ) {
@@ -99,9 +99,9 @@
 									$(this).addClass( setting.className );
 									break;
 								case 'image' :
-									var currentImg = $(this).find('img').attr('src').split( "_n", 2 );
-									var newCurrentImgSrc = currentImg[0] + "_r" + currentImg[1];
-									var currentImg = $(this).find('img').attr({ src: newCurrentImgSrc });
+									var currentImg = $(this).find('img').attr('src').split( "_n.", 2 );
+									var newCurrentImgSrc = currentImg[0] + "_r." + currentImg[1];
+									$(this).find('img').attr({ src: newCurrentImgSrc });
 									break;
 							}
 							return setting.keepFlg;
