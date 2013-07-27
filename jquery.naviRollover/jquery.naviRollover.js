@@ -1,11 +1,11 @@
 /**
  * jquery.naviRollover.js
  * Description: 現在のページが属するカテゴリーのボタンにクラスをつけたり画像を反転させたりするjQueryプラグイン
- * Version: 1.4
+ * Version: 1.4.1
  * Author: Takashi Kitajima
  * Autho URI: http://2inc.org
  * created: Jun 6, 2011
- * modified : July 23, 2013
+ * modified : July 27, 2013
  * License: GPL2
  *
  * Copyright 2012 Takashi Kitajima (email : inc@2inc.org)
@@ -36,10 +36,11 @@
 	$.fn.naviRollOver = function( config ) {
 		var navi = this;
 		var defaults = {
-			'type'     : 'html' ,			// タイプ(html or image)
-			'keepFlg'  : false,				// 見つけても処理続けるか
-			'tag'      : 'ul:first li a',	// 処理をするhtmlタグを指定
-			'className': 'cur'				// カレントリンクに付与されるclass名
+			type     : 'html' ,		// タイプ(html or image)
+			keepFlg  : false,		// 見つけても処理続けるか
+			tag      : 'ul li a',	// 処理をするhtmlタグを指定
+			className: 'cur',		// カレントリンクに付与されるclass名
+			firstStrictCheck: true	// 最初の要素を厳密にチェックするか
 		};
 		var config = $.extend( defaults, config );
 
@@ -56,22 +57,33 @@
 				if ( atag.hostname === location.hostname ) {
 					var navUrl = atag.pathname;
 					navUrl = removeIndex( navUrl );
-					if ( url === navUrl || ( url.indexOf( navUrl ) === 0 && i !== 0 ) ) {
-						switch ( config.type ) {
-							case 'html' :
-								$( this ).addClass( config.className );
-								break;
-							case 'image' :
-								var currentImg = $( this ).find( 'img' ).attr( 'src' ).split( '_n\.', 2 );
-								var newCurrentImgSrc = currentImg[0] + "_r." + currentImg[1];
-								$( this ).find( 'img' ).attr( { src: newCurrentImgSrc } );
-								break;
+					if ( config.firstStrictCheck === true ) {
+						if ( url === navUrl || ( url.indexOf( navUrl ) === 0 && i !== 0 ) ) {
+							changeCurrentItem( e );
 						}
-						return config.keepFlg;
+					} else if ( config.firstStrictCheck === false ) {
+						if ( url.indexOf( navUrl ) === 0 ) {
+							changeCurrentItem( e );
+						}
 					}
 				}
 			} );
 		} );
+
+		function changeCurrentItem( e ) {
+					console.log( config.type );
+			switch ( config.type ) {
+				case 'html' :
+					$( e ).addClass( config.className );
+					break;
+				case 'image' :
+					var currentImg = $( e ).find( 'img' ).attr( 'src' ).split( '_n\.', 2 );
+					var newCurrentImgSrc = currentImg[0] + "_r." + currentImg[1];
+					$( e ).find( 'img' ).attr( { src: newCurrentImgSrc } );
+					break;
+			}
+			return config.keepFlg;
+		}
 
 		function removeIndex( url ) {
 			if ( url.match( /^(.+\/)index\.([^\/]+)$/i ) )
