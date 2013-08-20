@@ -36,7 +36,7 @@
 	$.fn.naviRollOver = function( config ) {
 		var navi = this;
 		var defaults = {
-			type     : 'html' ,		// タイプ(html or image)
+			type     : 'html',		// タイプ(html or image)
 			keepFlg  : false,		// 見つけても処理続けるか
 			tag      : 'ul li a',	// 処理をするhtmlタグを指定
 			className: 'cur',		// カレントリンクに付与されるclass名
@@ -71,7 +71,6 @@
 		} );
 
 		function changeCurrentItem( e ) {
-					console.log( config.type );
 			switch ( config.type ) {
 				case 'html' :
 					$( e ).addClass( config.className );
