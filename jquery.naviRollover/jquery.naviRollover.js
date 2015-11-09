@@ -1,11 +1,11 @@
 /**
  * jquery.naviRollover.js
  * Description: 現在のページが属するカテゴリーのボタンにクラスをつけたり画像を反転させたりするjQueryプラグイン
- * Version: 1.4.1
+ * Version: 1.5.0
  * Author: Takashi Kitajima
  * Autho URI: http://2inc.org
  * created: Jun 6, 2011
- * modified : July 27, 2013
+ * modified : December 9, 2015
  * License: GPL2
  *
  * Copyright 2012 Takashi Kitajima (email : inc@2inc.org)
@@ -40,11 +40,12 @@
 			keepFlg  : false,		// 見つけても処理続けるか
 			tag      : 'ul li a',	// 処理をするhtmlタグを指定
 			className: 'cur',		// カレントリンクに付与されるclass名
-			firstStrictCheck: true	// 最初の要素を厳密にチェックするか
+			firstStrictCheck: true,	// 最初の要素を厳密にチェックするか
+			hashStrictCheck: false   // # つきの URL を別 URL として扱うか
 		};
 		var config = $.extend( defaults, config );
 
-		var url = removeIndex( location.pathname );
+		var url = removeIndex( location );
 		return this.each( function() {
 			var naviArr = navi.find( config.tag );
 			$.each( naviArr, function( i, e ) {
@@ -55,15 +56,14 @@
 						return true;
 				}
 				if ( atag.hostname === location.hostname ) {
-					var navUrl = atag.pathname;
-					navUrl = removeIndex( navUrl );
+					var navUrl = removeIndex( atag );
 					if ( config.firstStrictCheck === true ) {
 						if ( url === navUrl || ( url.indexOf( navUrl ) === 0 && i !== 0 ) ) {
-							changeCurrentItem( e );
+							return changeCurrentItem( e );
 						}
 					} else if ( config.firstStrictCheck === false ) {
 						if ( url.indexOf( navUrl ) === 0 ) {
-							changeCurrentItem( e );
+							return changeCurrentItem( e );
 						}
 					}
 				}
@@ -85,10 +85,19 @@
 		}
 
 		function removeIndex( url ) {
-			if ( url.match( /^(.+\/)index\.([^\/]+)$/i ) )
+			if ( config.hashStrictCheck ) {
+				var hash = url.hash;
+			}
+			url = url.pathname;
+			if ( url.match( /^(.+\/)index\.([^\/]+)$/i ) ) {
 				url = RegExp.$1;
-			if ( url.substring( 0, 1 ) != '/' )
+			}
+			if ( url.substring( 0, 1 ) != '/' ) {
 				url = '/' + url;
+			}
+			if ( hash ) {
+				url = url + hash;
+			}
 			return url;
 		}
 	};
